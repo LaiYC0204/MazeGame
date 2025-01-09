@@ -10,6 +10,6 @@ typedef struct {
 } Player;
 
 // 函數原型
-int movePlayer(int maze[HEIGHT][WIDTH], Player *player, char direction);
+int movePlayer(int maze[HEIGHT][WIDTH], Player *player, char direction, int *finish);
 
 #endif
