@@ -12,9 +12,10 @@ typedef struct {
 } Node;
 
 // 函數原型
-void generateMaze(int maze[HEIGHT][WIDTH]);
-void printMaze(int maze[HEIGHT][WIDTH]);
+void generateMaze();
 Node searchMinDistance(Node queue[MAX_QUEUE_SIZE], int front);
-void breakWall(int maze[HEIGHT][WIDTH], Node minDistance);
+void breakWall(Node minDistance);
+void printMaze(int playerX, int playerY);
+int* getMaze();
 
 #endif

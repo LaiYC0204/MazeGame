@@ -1,13 +1,19 @@
-#include "maze.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include "maze.h"
+
+static int maze[HEIGHT][WIDTH];
+int copyMaze[HEIGHT][WIDTH];
 
 // 生成迷宮
-void generateMaze(int maze[HEIGHT][WIDTH]) {
+void generateMaze() {
     int directions[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 上、下、左、右
     int isReachable = 0; // 是否能達到終點
     int front = 0, rear = 1;
     Node queue[MAX_QUEUE_SIZE];
+    srand(time(NULL));
 
     // 初始化迷宮(全部牆壁)
     for (int i = 0; i < HEIGHT; i++) {
@@ -39,21 +45,10 @@ void generateMaze(int maze[HEIGHT][WIDTH]) {
     // 檢查是否能達到終點
     if(isReachable == 0){
         Node minDistance = searchMinDistance(queue, front);
-        breakWall(maze, minDistance);
+        breakWall(minDistance);
     }
-}
 
-// 打印迷宮
-void printMaze(int maze[HEIGHT][WIDTH]) {
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++) {
-            if (maze[i][j] == 0) printf("%c", ' '); // 空地
-            if (maze[i][j] == 1) printf("%c", '#'); // 牆壁
-            if (maze[i][j] == 2) printf("%c", '0'); // 玩家
-            if (maze[i][j] == 3) printf("%c", '*'); // 終點
-        }
-        printf("\n");
-    }
+    maze[HEIGHT - 2][WIDTH - 2] = 3; // 終點
 }
 
 // 尋找離終點最近的點
@@ -71,11 +66,32 @@ Node searchMinDistance(Node queue[MAX_QUEUE_SIZE], int front){
 }
 
 // 破壞離終點最近的點與終點中間的牆壁
-void breakWall(int maze[HEIGHT][WIDTH], Node minDistance){
+void breakWall(Node minDistance){
     for(int col = WIDTH - 3; col >= minDistance.y; col--){
         maze[HEIGHT - 2][col] = 0;
     }
     for(int row = HEIGHT - 3; row >= minDistance.x; row--){
         maze[row][minDistance.y] = 0;
+    }
+}
+
+// 取得迷宮
+int* getMaze(){
+    return (int*)maze;
+}
+
+// 打印迷宮
+void printMaze(int playerX, int playerY) {
+    system("cls");
+    memcpy(copyMaze, maze, sizeof(maze));
+    copyMaze[playerX][playerY] = 2; // 玩家位置
+    for (int i = 0; i < HEIGHT; i++) {
+        for (int j = 0; j < WIDTH; j++) {
+            if (copyMaze[i][j] == 0) printf("%c", ' '); // 空地
+            if (copyMaze[i][j] == 1) printf("%c", '#'); // 牆壁
+            if (copyMaze[i][j] == 2) printf("%c", '0'); // 玩家
+            if (copyMaze[i][j] == 3) printf("%c", '*'); // 終點
+        }
+        printf("\n");
     }
 }

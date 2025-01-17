@@ -10,6 +10,7 @@ typedef struct {
 } Player;
 
 // 函數原型
-int movePlayer(int maze[HEIGHT][WIDTH], Player *player, char direction, int *finish);
+int movePlayer(int *maze, char direction);
+Player* getPlayer(); // 返回指向 Player 的指標
 
 #endif
